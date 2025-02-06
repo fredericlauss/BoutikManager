@@ -1,20 +1,89 @@
-# E-commerce Influenceur
+# E-commerce Application
 
-Une plateforme e-commerce pour un créateur de contenu permettant de gérer son stock et ses commandes.
+A full-stack e-commerce application built with Angular and NestJS.
 
-## Technologies utilisées
+## Quick Start
 
-- Frontend: Angular 16
-- Backend: NestJS
-- Base de données: PostgreSQL
-- Conteneurisation: Docker
+1. Clone the repository
+2. Run the entire application stack with Docker:
+   ```bash
+   docker compose up
+   ```
 
-## Prérequis
+The application will be available at:
+- Frontend: http://localhost:4200 
+- Backend: http://localhost:3000
 
-- Docker
+## Access URLs
 
-## Structure du projet
+- Frontend: `http://localhost:4200`
+- Backend API: `http://localhost:3000`
+- API Documentation (Swagger): `http://localhost:3000/api`
 
-## Installation
+## Features
 
-1. Cloner le repository
+- User authentication (login/register)
+- Product management (CRUD operations)
+- Role-based access control (Admin/Client)
+- Pre-loaded product database
+
+## Demo Data
+
+The application comes with pre-loaded products in the database, so you can start exploring the features immediately.
+
+### Getting Started
+
+1. Register a new account at `http://localhost:4200/register`
+   - You can choose between Admin and Client roles (demo purpose)
+   - Admin role gives you full access to product management
+   - Client role allows you to view products
+
+2. Login with your credentials at `http://localhost:4200/login`
+
+### Available Routes
+
+Frontend:
+- `/login` - Login page
+- `/register` - Registration page
+- `/products` - Product list (requires authentication)
+- `/products/new` - Create new product (Admin only)
+- `/products/edit/:id` - Edit product (Admin only)
+
+API Endpoints:
+- `POST /auth/register` - Register new user
+- `POST /auth/login` - Login
+- `GET /products` - Get all products
+- `GET /products/:id` - Get single product
+- `POST /products` - Create product (Admin only)
+- `PUT /products/:id` - Update product (Admin only)
+- `DELETE /products/:id` - Delete product (Admin only)
+
+## Development
+
+The application is containerized using Docker and includes:
+- Angular frontend
+- NestJS backend
+- PostgreSQL database
+
+### Environment Variables
+
+All necessary environment variables are configured in the `docker-compose.yml` file.
+
+## Notes
+
+- For demonstration purposes, the registration form allows selecting user roles (Admin/Client). In a production environment, this would typically be handled differently.
+- The database is pre-seeded with sample products for testing purposes.
+- Admin users have full CRUD access to products, while regular users can only view them.
+
+## Technologies Used
+
+- Frontend:
+  - Angular 17
+  - TailwindCSS
+  - TypeScript
+
+- Backend:
+  - NestJS
+  - TypeORM
+  - PostgreSQL
+  - JWT Authentication
