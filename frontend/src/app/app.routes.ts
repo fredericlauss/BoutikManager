@@ -5,6 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 import { UserRole } from './interfaces/user.interface';
+import { RegisterComponent } from './components/register/register.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/products', pathMatch: 'full' },
@@ -26,4 +27,5 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { roles: [UserRole.ADMIN] }
   },
+  { path: 'register', component: RegisterComponent },
 ];

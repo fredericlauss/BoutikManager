@@ -1,22 +1,26 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { UserRole } from '../../interfaces/user.interface';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-md w-full space-y-8">
         <div>
           <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
+            Create your account
           </h2>
+          <p class="mt-2 text-center text-sm text-gray-600">
+            Note: For demonstration purposes, you can choose your role.
+          </p>
         </div>
-        <form class="mt-8 space-y-6" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
           <div class="rounded-md shadow-sm -space-y-px">
             <div>
               <label for="email" class="sr-only">Email address</label>
@@ -27,20 +31,29 @@ import { AuthService } from '../../services/auth.service';
             <div>
               <label for="password" class="sr-only">Password</label>
               <input formControlName="password" type="password" required
-                     class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                     class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                      placeholder="Password">
+            </div>
+            <div>
+              <label for="role" class="sr-only">Role</label>
+              <select formControlName="role"
+                      class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
+                <option [value]="UserRole.CLIENT">Client</option>
+                <option [value]="UserRole.ADMIN">Admin</option>
+              </select>
             </div>
           </div>
 
           <div>
-            <button type="submit" [disabled]="!loginForm.valid"
+            <button type="submit" [disabled]="!registerForm.valid"
                     class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              Sign in
+              Register
             </button>
           </div>
-          <div class="text-sm text-center mt-4">
-            <a routerLink="/register" class="font-medium text-indigo-600 hover:text-indigo-500">
-              Don't have an account? Register
+
+          <div class="text-sm text-center">
+            <a routerLink="/login" class="font-medium text-indigo-600 hover:text-indigo-500">
+              Already have an account? Sign in
             </a>
           </div>
         </form>
@@ -48,28 +61,30 @@ import { AuthService } from '../../services/auth.service';
     </div>
   `
 })
-export class LoginComponent {
-  loginForm: FormGroup;
+export class RegisterComponent {
+  registerForm: FormGroup;
+  UserRole = UserRole; // Pour utiliser l'enum dans le template
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {
-    this.loginForm = this.fb.group({
+    this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      role: [UserRole.CLIENT, Validators.required]
     });
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe({
+    if (this.registerForm.valid) {
+      this.authService.register(this.registerForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/products']);
+          this.router.navigate(['/login']);
         },
         error: (error) => {
-          console.error('Login error:', error);
+          console.error('Registration error:', error);
           // Gérer l'erreur (afficher un message, etc.)
         }
       });
