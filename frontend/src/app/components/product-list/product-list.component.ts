@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { AuthService } from '../../services/auth.service';
 import { Product } from '../../interfaces/product.interface';
@@ -58,7 +58,8 @@ export class ProductListComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     const user = this.authService.getCurrentUser();
     this.isAdmin = user?.role === UserRole.ADMIN;
@@ -85,6 +86,6 @@ export class ProductListComponent implements OnInit {
   }
 
   editProduct(id: number): void {
-    // Navigation will be handled by router
+    this.router.navigate(['/products/edit', id]);
   }
 } 
