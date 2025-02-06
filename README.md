@@ -78,12 +78,9 @@ All necessary environment variables are configured in the `docker-compose.yml` f
 ## Technologies Used
 
 - Frontend:
-  - Angular 17
-  - TailwindCSS
+  - Angular
   - TypeScript
 
 - Backend:
   - NestJS
   - TypeORM
-  - PostgreSQL
-  - JWT Authentication

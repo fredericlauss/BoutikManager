@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, OneToMany } from 'typeorm';
 import { UserRole } from '../interfaces/user.interface';
 import * as bcrypt from 'bcrypt';
+import { Order } from '../../orders/entities/order.entity';
 
 @Entity()
 export class User {
@@ -19,6 +20,9 @@ export class User {
     default: UserRole.CLIENT
   })
   role: UserRole;
+
+  @OneToMany(() => Order, order => order.user)
+  orders: Order[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
