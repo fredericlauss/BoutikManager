@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LoginDto, RegisterDto, AuthResponse } from '../interfaces/auth.interface';
-import { User } from '../interfaces/user.interface';
+import { User, UserRole } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/auth';
+  private readonly API_URL = 'http://localhost:3000/auth';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   login(loginDto: LoginDto): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginDto).pipe(
+    return this.http.post<AuthResponse>(`${this.API_URL}/login`, loginDto).pipe(
       tap(response => {
         localStorage.setItem('access_token', response.access_token);
         localStorage.setItem('user', JSON.stringify(response.user));
@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   register(registerDto: RegisterDto): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/register`, registerDto);
+    return this.http.post<User>(`${this.API_URL}/register`, registerDto);
   }
 
   logout(): void {

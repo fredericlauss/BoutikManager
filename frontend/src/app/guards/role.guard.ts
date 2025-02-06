@@ -12,12 +12,13 @@ export class RoleGuard {
     private router: Router
   ) {}
 
-  canActivate(role: UserRole): boolean {
-    if (this.authService.hasRole(role)) {
+  canActivate(): boolean {
+    const user = this.authService.getCurrentUser();
+    if (user && user.role === UserRole.ADMIN) {
       return true;
     }
 
-    this.router.navigate(['/']);
+    this.router.navigate(['/products']);
     return false;
   }
 } 
