@@ -41,6 +41,32 @@
                 Delete
               </button>
             </div>
+          } @else {
+            <div class="cart-actions">
+              <div class="quantity-selector">
+                <button 
+                  (click)="decreaseQuantity(product)"
+                  [disabled]="quantities[product.id] <= 1">
+                  -
+                </button>
+                <input 
+                  type="number" 
+                  [(ngModel)]="quantities[product.id]" 
+                  [max]="product.stock"
+                  min="1">
+                <button 
+                  (click)="increaseQuantity(product)"
+                  [disabled]="quantities[product.id] >= product.stock">
+                  +
+                </button>
+              </div>
+              <button 
+                (click)="addToCart(product)"
+                class="add-to-cart-button"
+                [disabled]="product.stock === 0">
+                {{ product.stock === 0 ? 'Out of Stock' : 'Add to Cart' }}
+              </button>
+            </div>
           }
         </div>
       </div>

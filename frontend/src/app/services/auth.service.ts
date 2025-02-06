@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 import { LoginDto, RegisterDto, AuthResponse } from '../interfaces/auth.interface';
 import { User, UserRole } from '../interfaces/user.interface';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,18 +14,19 @@ export class AuthService {
   private isBrowser: boolean;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
+  private readonly TOKEN_KEY = 'auth_token';
+  private readonly USER_KEY = 'current_user';
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   constructor(
     private http: HttpClient,
-    @Inject(PLATFORM_ID) platformId: Object
+    @Inject(PLATFORM_ID) platformId: Object,
+    private router: Router
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
-    // Charger l'utilisateur depuis le localStorage au démarrage
     if (this.isBrowser) {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        this.currentUserSubject.next(JSON.parse(storedUser));
-      }
+      this.isAuthenticatedSubject.next(this.hasToken());
     }
   }
 
@@ -36,6 +38,7 @@ export class AuthService {
           localStorage.setItem('user', JSON.stringify(response.user));
         }
         this.currentUserSubject.next(response.user);
+        this.isAuthenticatedSubject.next(true);
       })
     );
   }
@@ -50,6 +53,8 @@ export class AuthService {
       localStorage.removeItem('user');
     }
     this.currentUserSubject.next(null);
+    this.isAuthenticatedSubject.next(false);
+    this.router.navigate(['/login']);
   }
 
   getToken(): string | null {
@@ -70,5 +75,10 @@ export class AuthService {
   hasRole(role: string): boolean {
     const user = this.getCurrentUser();
     return user ? user.role === role : false;
+  }
+
+  private hasToken(): boolean {
+    if (!this.isBrowser) return false;
+    return !!localStorage.getItem(this.TOKEN_KEY);
   }
 } 
