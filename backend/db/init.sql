@@ -16,5 +16,5 @@ CREATE TABLE IF NOT EXISTS product (
 -- Insertion de données de test
 INSERT INTO product (name, description, price, stock, image_url) 
 VALUES 
-    ('Veste Imperméable', 'Veste imperméable tendance et confortable, parfaite pour toutes les saisons. Disponible en plusieurs coloris.', 99, 100, 'https://example.com/veste.jpg'),
-    ('Veste Imperméable - Edition Limitée', 'Version exclusive de notre veste imperméable avec finitions premium et design unique.', 149, 50, 'https://example.com/veste-limited.jpg'); 
+    ('Veste Imperméable', 'Veste imperméable tendance et confortable, parfaite pour toutes les saisons. Disponible en plusieurs coloris.', 99, 100, 'https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg'),
+    ('Veste Imperméable - Edition Limitée', 'Version exclusive de notre veste imperméable avec finitions premium et design unique.', 149, 50, 'https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg'); 

@@ -2,7 +2,6 @@
   <div class="register-box">
     <div class="register-header">
       <h2>Create your account</h2>
-      <p>Note: For demonstration purposes, you can choose your role.</p>
     </div>
 
     @if (errorMessage) {
@@ -49,7 +48,13 @@
       </div>
 
       <div class="form-group">
-        <label for="role">Role</label>
+        <div class="role-header">
+          <label for="role">Role</label>
+          <div class="demo-notice">
+            <span class="demo-icon">ℹ️</span>
+            <span>Demo purpose only: Role selection would not be available in a real application</span>
+          </div>
+        </div>
         <select id="role" formControlName="role">
           <option [value]="UserRole.CLIENT">Client</option>
           <option [value]="UserRole.ADMIN">Admin</option>
