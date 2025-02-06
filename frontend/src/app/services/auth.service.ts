@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 import { LoginDto, RegisterDto, AuthResponse } from '../interfaces/auth.interface';
 import { User, UserRole } from '../interfaces/user.interface';
 
@@ -8,47 +9,61 @@ import { User, UserRole } from '../interfaces/user.interface';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:3000/auth';
+  private apiUrl = 'http://localhost:3000/auth';
+  private isBrowser: boolean;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
     // Charger l'utilisateur depuis le localStorage au démarrage
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      this.currentUserSubject.next(JSON.parse(storedUser));
+    if (this.isBrowser) {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        this.currentUserSubject.next(JSON.parse(storedUser));
+      }
     }
   }
 
   login(loginDto: LoginDto): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/login`, loginDto).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginDto).pipe(
       tap(response => {
-        localStorage.setItem('access_token', response.access_token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        if (this.isBrowser) {
+          localStorage.setItem('access_token', response.access_token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+        }
         this.currentUserSubject.next(response.user);
       })
     );
   }
 
   register(registerDto: RegisterDto): Observable<User> {
-    return this.http.post<User>(`${this.API_URL}/register`, registerDto);
+    return this.http.post<User>(`${this.apiUrl}/register`, registerDto);
   }
 
   logout(): void {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user');
+    if (this.isBrowser) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
+    }
     this.currentUserSubject.next(null);
   }
 
   getToken(): string | null {
+    if (!this.isBrowser) return null;
     return localStorage.getItem('access_token');
   }
 
   isLoggedIn(): boolean {
+    if (!this.isBrowser) return false;
     return !!this.getToken();
   }
 
   getCurrentUser(): User | null {
+    if (!this.isBrowser) return null;
     return this.currentUserSubject.value;
   }
 
