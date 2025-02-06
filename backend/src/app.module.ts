@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as crypto from 'crypto';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import * as crypto from 'crypto';
       },
       inject: [ConfigService],
     }),
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
