@@ -27,9 +27,13 @@ import { ProductService } from '../../services/product.service';
         </div>
 
         <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2">Price</label>
-          <input type="number" formControlName="price"
+          <label class="block text-gray-700 text-sm font-bold mb-2">Price (€)</label>
+          <input type="text" formControlName="price"
+                 (blur)="formatPrice()"
                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+          @if (productForm.get('price')?.errors?.['invalidFormat']) {
+            <p class="text-red-500 text-xs mt-1">Please enter a valid price (e.g., 12,99)</p>
+          }
         </div>
 
         <div class="mb-4">
@@ -72,7 +76,7 @@ export class ProductFormComponent implements OnInit {
     this.productForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(0)]],
+      price: ['', [Validators.required, this.priceValidator()]],
       stock: [0, [Validators.required, Validators.min(0)]],
       imageUrl: ['']
     });
@@ -88,14 +92,49 @@ export class ProductFormComponent implements OnInit {
 
   loadProduct(id: number): void {
     this.productService.getProduct(id).subscribe({
-      next: (product) => this.productForm.patchValue(product),
+      next: (product) => {
+        // Convertir le prix en format français
+        const formattedProduct = {
+          ...product,
+          price: product.price.toString().replace('.', ',')
+        };
+        this.productForm.patchValue(formattedProduct);
+      },
       error: (error) => console.error('Error loading product:', error)
     });
   }
 
+  priceValidator() {
+    return (control: any) => {
+      if (!control.value) {
+        return null;
+      }
+      
+      // Accepte les formats: 12,99 ou 12
+      const isValid = /^\d+(?:,\d{0,2})?$/.test(control.value);
+      return isValid ? null : { invalidFormat: true };
+    };
+  }
+
+  formatPrice() {
+    const priceControl = this.productForm.get('price');
+    if (priceControl && priceControl.value) {
+      // Formater le prix avec exactement 2 décimales
+      const value = priceControl.value.replace(',', '.');
+      const formatted = Number(value).toFixed(2).replace('.', ',');
+      priceControl.setValue(formatted, { emitEvent: false });
+    }
+  }
+
   onSubmit(): void {
     if (this.productForm.valid) {
-      const product = this.productForm.value;
+      const formData = this.productForm.value;
+      
+      // Convertir le prix en format anglais pour l'API
+      const product = {
+        ...formData,
+        price: Number(formData.price.replace(',', '.'))
+      };
       
       if (this.isEditing && this.productId) {
         this.productService.updateProduct(this.productId, product).subscribe({
