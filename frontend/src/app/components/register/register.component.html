@@ -1,0 +1,66 @@
+<div class="register-container">
+  <div class="register-box">
+    <div class="register-header">
+      <h2>Create your account</h2>
+      <p>Note: For demonstration purposes, you can choose your role.</p>
+    </div>
+
+    @if (errorMessage) {
+      <div class="error-message">
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input 
+          id="email"
+          type="email" 
+          formControlName="email" 
+          placeholder="Email address">
+        @if (showError('email')) {
+          <div class="field-error">
+            @if (registerForm.get('email')?.errors?.['required']) {
+              Email is required
+            } @else if (registerForm.get('email')?.errors?.['email']) {
+              Please enter a valid email address
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          id="password"
+          type="password" 
+          formControlName="password" 
+          placeholder="Password">
+        @if (showError('password')) {
+          <div class="field-error">
+            @if (registerForm.get('password')?.errors?.['required']) {
+              Password is required
+            } @else if (registerForm.get('password')?.errors?.['minlength']) {
+              Password must be at least 6 characters long
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role</label>
+        <select id="role" formControlName="role">
+          <option [value]="UserRole.CLIENT">Client</option>
+          <option [value]="UserRole.ADMIN">Admin</option>
+        </select>
+      </div>
+
+      <button type="submit" [disabled]="!registerForm.valid">Register</button>
+
+      <div class="login-link">
+        <a routerLink="/login">Already have an account? Sign in</a>
+      </div>
+    </form>
+  </div>
+</div> 

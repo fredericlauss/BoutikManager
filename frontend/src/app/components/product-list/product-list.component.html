@@ -1,0 +1,53 @@
+<div class="products-container">
+  <div class="header">
+    <h1>Products</h1>
+    @if (isAdmin) {
+      <button routerLink="/products/new" class="add-button">
+        <span class="icon">+</span>
+        Add Product
+      </button>
+    }
+  </div>
+
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="products-grid">
+    @for (product of products; track product.id) {
+      <div class="product-card">
+        <div class="image-container">
+          <img [src]="product.imageUrl || 'assets/placeholder.png'" 
+               [alt]="product.name"
+               loading="lazy">
+        </div>
+        <div class="product-info">
+          <h2>{{ product.name }}</h2>
+          <p class="description">{{ product.description }}</p>
+          <div class="details">
+            <span class="price">€{{ product.price }}</span>
+            <span class="stock" [class.low-stock]="product.stock < 10">
+              Stock: {{ product.stock }}
+            </span>
+          </div>
+          @if (isAdmin) {
+            <div class="admin-actions">
+              <button (click)="editProduct(product.id)" class="edit-button">
+                Edit
+              </button>
+              <button (click)="deleteProduct(product.id)" class="delete-button">
+                Delete
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    } @empty {
+      <div class="no-products">
+        <p>No products available.</p>
+      </div>
+    }
+  </div>
+</div> 

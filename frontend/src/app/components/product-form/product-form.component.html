@@ -1,0 +1,95 @@
+<div class="product-form-container">
+  <div class="form-box">
+    <div class="form-header">
+      <h1>{{ isEditing ? 'Edit' : 'Add' }} Product</h1>
+    </div>
+
+    @if (errorMessage) {
+      <div class="error-message">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input 
+          id="name"
+          type="text" 
+          formControlName="name" 
+          placeholder="Product name">
+        @if (showError('name')) {
+          <div class="field-error">Name is required</div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea 
+          id="description"
+          formControlName="description" 
+          placeholder="Product description"
+          rows="4">
+        </textarea>
+        @if (showError('description')) {
+          <div class="field-error">Description is required</div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="price">Price (€)</label>
+        <input 
+          id="price"
+          type="text" 
+          formControlName="price"
+          (blur)="formatPrice()"
+          placeholder="12,99">
+        @if (showError('price')) {
+          <div class="field-error">
+            @if (productForm.get('price')?.errors?.['required']) {
+              Price is required
+            } @else if (productForm.get('price')?.errors?.['invalidFormat']) {
+              Please enter a valid price (e.g., 12,99)
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="stock">Stock</label>
+        <input 
+          id="stock"
+          type="number" 
+          formControlName="stock" 
+          min="0">
+        @if (showError('stock')) {
+          <div class="field-error">
+            @if (productForm.get('stock')?.errors?.['required']) {
+              Stock is required
+            } @else if (productForm.get('stock')?.errors?.['min']) {
+              Stock cannot be negative
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="imageUrl">Image URL</label>
+        <input 
+          id="imageUrl"
+          type="text" 
+          formControlName="imageUrl" 
+          placeholder="https://example.com/image.jpg">
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="cancel()" class="cancel-button">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="!productForm.valid" class="submit-button">
+          {{ isEditing ? 'Update' : 'Create' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div> 
