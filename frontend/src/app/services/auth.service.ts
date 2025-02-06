@@ -12,12 +12,11 @@ import { Router } from '@angular/router';
 export class AuthService {
   private apiUrl = 'http://localhost:3000/auth';
   private isBrowser: boolean;
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
-  currentUser$ = this.currentUserSubject.asObservable();
+  private currentUser: User | null = null;
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'current_user';
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  private isAuthenticatedSubject: BehaviorSubject<boolean>;
+  isAuthenticated$: Observable<boolean>;
 
   constructor(
     private http: HttpClient,
@@ -25,9 +24,23 @@ export class AuthService {
     private router: Router
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
-    if (this.isBrowser) {
-      this.isAuthenticatedSubject.next(this.hasToken());
+    
+    // Initialiser l'état d'authentification
+    const token = this.getToken();
+    const user = this.getCurrentUser();
+    const isAuthenticated = !!token && !!user;
+    
+    this.isAuthenticatedSubject = new BehaviorSubject<boolean>(isAuthenticated);
+    this.isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+    
+    if (isAuthenticated && user) {
+      this.currentUser = user;
+      this.isAuthenticatedSubject.next(true);
     }
+  }
+
+  isAuthenticated(): boolean {
+    return this.isAuthenticatedSubject.value;
   }
 
   login(loginDto: LoginDto): Observable<AuthResponse> {
@@ -36,9 +49,9 @@ export class AuthService {
         if (this.isBrowser) {
           localStorage.setItem('access_token', response.access_token);
           localStorage.setItem('user', JSON.stringify(response.user));
+          this.currentUser = response.user;
+          this.isAuthenticatedSubject.next(true);
         }
-        this.currentUserSubject.next(response.user);
-        this.isAuthenticatedSubject.next(true);
       })
     );
   }
@@ -52,7 +65,7 @@ export class AuthService {
       localStorage.removeItem('access_token');
       localStorage.removeItem('user');
     }
-    this.currentUserSubject.next(null);
+    this.currentUser = null;
     this.isAuthenticatedSubject.next(false);
     this.router.navigate(['/login']);
   }
@@ -68,8 +81,22 @@ export class AuthService {
   }
 
   getCurrentUser(): User | null {
+    if (this.currentUser) {
+      return this.currentUser;
+    }
+
     if (!this.isBrowser) return null;
-    return this.currentUserSubject.value;
+    
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        this.currentUser = JSON.parse(userStr);
+        return this.currentUser;
+      } catch {
+        return null;
+      }
+    }
+    return null;
   }
 
   hasRole(role: string): boolean {
@@ -77,8 +104,22 @@ export class AuthService {
     return user ? user.role === role : false;
   }
 
-  private hasToken(): boolean {
-    if (!this.isBrowser) return false;
-    return !!localStorage.getItem(this.TOKEN_KEY);
+  checkAuthState(): void {
+    const token = this.getToken();
+    const user = this.getCurrentUser();
+    const isAuthenticated = !!token && !!user;
+    
+    if (isAuthenticated && user) {
+      this.currentUser = user;
+      this.isAuthenticatedSubject.next(true);
+    } else {
+      this.currentUser = null;
+      this.isAuthenticatedSubject.next(false);
+    }
+  }
+
+  isAdmin(): boolean {
+    const user = this.getCurrentUser();
+    return user?.role === UserRole.ADMIN;
   }
 } 

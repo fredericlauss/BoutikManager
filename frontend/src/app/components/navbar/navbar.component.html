@@ -1,0 +1,49 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <a routerLink="/" class="brand">BoutikManager</a>
+
+    @if (isLoggedIn) {
+      <ul class="nav-links">
+        <li>
+          <a routerLink="/products" routerLinkActive="active">Products</a>
+        </li>
+        
+        @if (!isAdmin) {
+          <li>
+            <a routerLink="/cart" routerLinkActive="active" class="cart-link">
+              Cart
+              @if (cartItemsCount > 0) {
+                <span class="cart-badge">{{ cartItemsCount }}</span>
+              }
+            </a>
+          </li>
+        }
+        
+        <li>
+          <a routerLink="/orders" routerLinkActive="active">
+            {{ isAdmin ? 'Manage Orders' : 'My Orders' }}
+          </a>
+        </li>
+        
+        @if (isAdmin) {
+          <li>
+            <a routerLink="/users" routerLinkActive="active">Users</a>
+          </li>
+        }
+        
+        <li>
+          <button (click)="logout()" class="logout-button">Logout</button>
+        </li>
+      </ul>
+    } @else {
+      <ul class="nav-links">
+        <li>
+          <a routerLink="/login" routerLinkActive="active">Login</a>
+        </li>
+        <li>
+          <a routerLink="/register" routerLinkActive="active">Register</a>
+        </li>
+      </ul>
+    }
+  </div>
+</nav> 
