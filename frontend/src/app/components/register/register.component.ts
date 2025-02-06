@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UserRole } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   template: `
     <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-md w-full space-y-8">
@@ -20,6 +20,13 @@ import { UserRole } from '../../interfaces/user.interface';
             Note: For demonstration purposes, you can choose your role.
           </p>
         </div>
+
+        @if (errorMessage) {
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ errorMessage }}</span>
+          </div>
+        }
+
         <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
           <div class="rounded-md shadow-sm -space-y-px">
             <div>
@@ -63,7 +70,8 @@ import { UserRole } from '../../interfaces/user.interface';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  UserRole = UserRole; // Pour utiliser l'enum dans le template
+  UserRole = UserRole;
+  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -79,13 +87,19 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
+      this.errorMessage = ''; // Reset error message
       this.authService.register(this.registerForm.value).subscribe({
         next: () => {
           this.router.navigate(['/login']);
         },
         error: (error) => {
-          console.error('Registration error:', error);
-          // Gérer l'erreur (afficher un message, etc.)
+          if (error.error?.message) {
+            this.errorMessage = Array.isArray(error.error.message) 
+              ? error.error.message.join(', ') 
+              : error.error.message;
+          } else {
+            this.errorMessage = 'Registration failed. Please try again.';
+          }
         }
       });
     }

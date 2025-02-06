@@ -16,6 +16,13 @@ import { AuthService } from '../../services/auth.service';
             Sign in to your account
           </h2>
         </div>
+
+        @if (errorMessage) {
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ errorMessage }}</span>
+          </div>
+        }
+
         <form class="mt-8 space-y-6" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="rounded-md shadow-sm -space-y-px">
             <div>
@@ -50,6 +57,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -64,13 +72,19 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
+      this.errorMessage = ''; // Reset error message
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
           this.router.navigate(['/products']);
         },
         error: (error) => {
-          console.error('Login error:', error);
-          // Gérer l'erreur (afficher un message, etc.)
+          if (error.error?.message) {
+            this.errorMessage = Array.isArray(error.error.message) 
+              ? error.error.message.join(', ') 
+              : error.error.message;
+          } else {
+            this.errorMessage = 'Invalid email or password';
+          }
         }
       });
     }
