@@ -10,7 +10,7 @@ A full-stack e-commerce application built with Angular and NestJS.
    cd <repository-name>
    ```
 
-2. Install dependencies:
+2. (Optional) Install dependencies:
    ```bash
    # Install frontend dependencies
    cd frontend
