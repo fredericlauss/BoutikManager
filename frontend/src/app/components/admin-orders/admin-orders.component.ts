@@ -12,7 +12,7 @@ import { Order, OrderStatus } from '../../interfaces/order.interface';
 })
 export class AdminOrdersComponent implements OnInit {
   orders: Order[] = [];
-  OrderStatus = OrderStatus; // Pour utiliser l'enum dans le template
+  OrderStatus = OrderStatus;
 
   constructor(private orderService: OrderService) {}
 
@@ -31,8 +31,18 @@ export class AdminOrdersComponent implements OnInit {
   updateStatus(orderId: number, status: OrderStatus) {
     this.orderService.updateOrderStatus(orderId, status).subscribe(
       () => {
-        this.loadOrders(); // Recharger la liste après la mise à jour
+        this.loadOrders();
       }
     );
+  }
+
+  deleteOrder(orderId: number) {
+    if (confirm('Are you sure you want to delete this order?')) {
+      this.orderService.deleteOrder(orderId).subscribe(
+        () => {
+          this.loadOrders();
+        }
+      );
+    }
   }
 } 

@@ -130,6 +130,7 @@
         .admin-actions {
           display: flex;
           gap: 0.5rem;
+          flex-wrap: wrap;
 
           button {
             padding: 0.5rem 1rem;
@@ -140,27 +141,43 @@
             cursor: pointer;
             transition: background-color 0.2s;
 
-            &.ship-button {
-              background-color: #059669;
-              color: white;
-
-              &:hover {
-                background-color: #047857;
-              }
-            }
-
-            &.cancel-button {
-              background-color: #dc2626;
-              color: white;
-
-              &:hover {
-                background-color: #b91c1c;
-              }
-            }
-
             &:disabled {
               opacity: 0.5;
               cursor: not-allowed;
+            }
+
+            &.status-button {
+              &.pending {
+                background-color: #fef3c7;
+                color: #d97706;
+                &:hover:not(:disabled) {
+                  background-color: #fde68a;
+                }
+              }
+
+              &.shipped {
+                background-color: #d1fae5;
+                color: #059669;
+                &:hover:not(:disabled) {
+                  background-color: #a7f3d0;
+                }
+              }
+
+              &.cancelled {
+                background-color: #fee2e2;
+                color: #dc2626;
+                &:hover:not(:disabled) {
+                  background-color: #fecaca;
+                }
+              }
+            }
+
+            &.delete-button {
+              background-color: #ef4444;
+              color: white;
+              &:hover {
+                background-color: #dc2626;
+              }
             }
           }
         }

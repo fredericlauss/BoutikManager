@@ -118,4 +118,31 @@ export class OrdersService {
     order.status = status;
     return this.orderRepository.save(order);
   }
+
+  async remove(id: number): Promise<void> {
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['items']
+    });
+
+    if (!order) {
+      throw new NotFoundException(`Order #${id} not found`);
+    }
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.remove(order.items);
+      await queryRunner.manager.remove(order);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      await queryRunner.release();
+    }
+  }
 } 

@@ -29,16 +29,29 @@
             {{ order.status }}
           </div>
           <div class="admin-actions">
-            @if (order.status === OrderStatus.PENDING) {
-              <button class="ship-button" (click)="updateStatus(order.id, OrderStatus.SHIPPED)">
-                Mark as Shipped
-              </button>
-            }
-            @if (order.status !== OrderStatus.CANCELLED) {
-              <button class="cancel-button" (click)="updateStatus(order.id, OrderStatus.CANCELLED)">
-                Cancel Order
-              </button>
-            }
+            <button 
+              class="status-button pending" 
+              [disabled]="order.status === OrderStatus.PENDING"
+              (click)="updateStatus(order.id, OrderStatus.PENDING)">
+              Pending
+            </button>
+            <button 
+              class="status-button shipped" 
+              [disabled]="order.status === OrderStatus.SHIPPED"
+              (click)="updateStatus(order.id, OrderStatus.SHIPPED)">
+              Shipped
+            </button>
+            <button 
+              class="status-button cancelled" 
+              [disabled]="order.status === OrderStatus.CANCELLED"
+              (click)="updateStatus(order.id, OrderStatus.CANCELLED)">
+              Cancelled
+            </button>
+            <button 
+              class="delete-button" 
+              (click)="deleteOrder(order.id)">
+              Delete
+            </button>
           </div>
         </div>
       </div>

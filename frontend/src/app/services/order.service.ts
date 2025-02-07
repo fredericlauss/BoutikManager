@@ -31,4 +31,8 @@ export class OrderService {
   updateOrderStatus(orderId: number, status: OrderStatus): Observable<Order> {
     return this.http.patch<Order>(`${this.apiUrl}/${orderId}/status`, { status });
   }
+
+  deleteOrder(orderId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${orderId}`);
+  }
 } 
