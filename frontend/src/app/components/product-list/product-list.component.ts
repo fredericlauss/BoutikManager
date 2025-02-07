@@ -39,10 +39,10 @@ export class ProductListComponent implements OnInit {
     this.productService.getProducts().subscribe({
       next: (products) => {
         this.products = products;
-        // Initialiser les quantités à 1 pour chaque produit
         this.products.forEach(product => {
           this.quantities[product.id] = 1;
         });
+        this.errorMessage = '';
       },
       error: (error) => {
         console.error('Error loading products:', error);
@@ -74,10 +74,13 @@ export class ProductListComponent implements OnInit {
   deleteProduct(id: number): void {
     if (confirm('Are you sure you want to delete this product?')) {
       this.productService.deleteProduct(id).subscribe({
-        next: () => this.loadProducts(),
+        next: () => {
+          this.loadProducts();
+          this.errorMessage = '';
+        },
         error: (error) => {
           console.error('Error deleting product:', error);
-          this.errorMessage = 'Error deleting product. Please try again.';
+          this.errorMessage = error.error.message || 'Error deleting product. Please try again.';
         }
       });
     }

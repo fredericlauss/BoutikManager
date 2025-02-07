@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../entities/product.entity';
@@ -35,8 +35,21 @@ export class ProductsService {
     return await this.productRepository.save(product);
   }
 
-  async remove(id: number): Promise<void> {
-    const product = await this.findOne(id);
-    await this.productRepository.remove(product);
+  async remove(id: number) {
+    try {
+      const product = await this.productRepository.findOne({ where: { id } });
+      if (!product) {
+        throw new NotFoundException(`Product with ID ${id} not found`);
+      }
+      
+      await this.productRepository.remove(product);
+    } catch (error) {
+      if (error.code === '23503') {
+        throw new ConflictException(
+          'Cannot delete this product as it is associated with existing orders. To maintain order history integrity, products linked to orders cannot be deleted.'
+        );
+      }
+      throw error;
+    }
   }
 } 

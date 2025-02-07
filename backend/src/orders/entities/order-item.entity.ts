@@ -7,7 +7,7 @@ export class OrderItem {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Product, { eager: true })
+  @ManyToOne(() => Product, { eager: true, onDelete: 'RESTRICT' })
   product: Product;
 
   @Column()
