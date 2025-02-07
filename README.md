@@ -2,6 +2,15 @@
 
 A full-stack e-commerce application built with Angular and NestJS.
 
+## Prerequisites
+
+Before running the application, ensure you have:
+- Docker installed
+- The following ports available on your machine:
+  - `4200`: Frontend (Angular)
+  - `3000`: Backend (NestJS)
+  - `5432`: PostgreSQL Database
+
 ## Quick Start
 
 1. Clone the repository:
