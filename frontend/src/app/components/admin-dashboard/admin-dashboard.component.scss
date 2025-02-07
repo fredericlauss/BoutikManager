@@ -3,30 +3,31 @@
   max-width: 1200px;
   margin: 0 auto;
 
-  .stats-grid {
+  .top-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 250px 1fr;
     gap: 1.5rem;
     margin-bottom: 2rem;
+  }
 
-    .stat-card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      text-align: center;
+  .stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    height: fit-content;
 
-      h3 {
-        color: #4b5563;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-      }
+    h3 {
+      color: #4b5563;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
 
-      .stat-value {
-        font-size: 2rem;
-        font-weight: 600;
-        color: #1f2937;
-      }
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #1f2937;
     }
   }
 
@@ -35,11 +36,15 @@
     padding: 1.5rem;
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
+    height: 400px;
 
     h3 {
       color: #4b5563;
       margin-bottom: 1rem;
+    }
+
+    canvas {
+      max-height: 300px;
     }
   }
 
@@ -56,8 +61,10 @@
 
     .low-stock-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 1rem;
+      max-height: 300px;
+      overflow-y: auto;
 
       .product-card {
         border: 1px solid #e5e7eb;
@@ -78,22 +85,22 @@
 
         img {
           width: 100%;
-          height: 150px;
+          height: 100px;
           object-fit: cover;
         }
 
         .product-info {
-          padding: 1rem;
+          padding: 0.75rem;
 
           h4 {
-            font-size: 1rem;
+            font-size: 0.875rem;
             font-weight: 500;
             color: #1f2937;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
           }
 
           .stock-count {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             color: #6b7280;
             &.critical {
               color: #ef4444;
@@ -108,5 +115,13 @@
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 1rem;
+
+    .top-section {
+      grid-template-columns: 1fr;
+    }
+
+    .low-stock-grid {
+      max-height: 400px;
+    }
   }
 } 

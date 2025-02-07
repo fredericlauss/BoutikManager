@@ -25,12 +25,13 @@
           </li>
         }
       
-        
         @if (isAdmin) {
+          <li>
+            <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+          </li>
           <li>
             <a routerLink="/admin/orders" routerLinkActive="active">Orders</a>
           </li>
-          
         }
         
         <li>
