@@ -18,7 +18,6 @@ The application will be available at:
 
 - Frontend: `http://localhost:4200`
 - Backend API: `http://localhost:3000`
-- API Documentation (Swagger): `http://localhost:3000/api`
 
 ## Features
 

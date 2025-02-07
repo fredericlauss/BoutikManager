@@ -48,6 +48,24 @@
       </div>
 
       <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input 
+          id="confirmPassword"
+          type="password" 
+          formControlName="confirmPassword" 
+          placeholder="Confirm Password">
+        @if (showError('confirmPassword')) {
+          <div class="field-error">
+            @if (registerForm.get('confirmPassword')?.errors?.['required']) {
+              Password confirmation is required
+            } @else if (registerForm.get('confirmPassword')?.errors?.['passwordMismatch']) {
+              Passwords do not match
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
         <div class="role-header">
           <label for="role">Role</label>
           <div class="demo-notice">
