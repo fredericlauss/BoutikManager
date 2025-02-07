@@ -4,8 +4,18 @@ A full-stack e-commerce application built with Angular and NestJS.
 
 ## Quick Start
 
-1. Clone the repository
-2. Run the entire application stack with Docker:
+## Quick Start
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd <repository-name>
+   ```
+
+2. Set up environment variables:
+   edit `.env` file like `.env.exemple`
+
+3. Run the entire application stack with Docker:
    ```bash
    docker compose up
    ```
