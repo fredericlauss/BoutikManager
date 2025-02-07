@@ -27,6 +27,10 @@ The application will be available at:
 - Order management
 - Role-based access control (Admin/Client)
 - Pre-loaded product database
+- Admin Dashboard with:
+  - Total orders count
+  - Best-selling products chart
+  - Low stock alerts
 
 ## Demo Data
 
@@ -52,6 +56,10 @@ Frontend:
 - `/cart` - Shopping cart (Client only)
 - `/orders` - User orders list (Client)
 - `/admin/orders` - Manage all orders (Admin only)
+- `/admin/dashboard` - Statistics dashboard (Admin only)
+  - View total orders
+  - Chart of best-selling products
+  - Monitor low stock products
 
 API Endpoints:
 - Auth:
@@ -95,6 +103,7 @@ All necessary environment variables are configured in the `docker-compose.yml` f
 - Frontend:
   - Angular
   - TypeScript
+  - Chart.js
 
 - Backend:
   - NestJS
