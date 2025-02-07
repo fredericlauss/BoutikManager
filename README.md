@@ -4,18 +4,29 @@ A full-stack e-commerce application built with Angular and NestJS.
 
 ## Quick Start
 
-## Quick Start
-
 1. Clone the repository:
    ```bash
    git clone <repository-url>
    cd <repository-name>
    ```
 
-2. Set up environment variables:
-   edit `.env` file like `.env.exemple`
+2. Install dependencies:
+   ```bash
+   # Install frontend dependencies
+   cd frontend
+   npm install
+   cd ..
 
-3. Run the entire application stack with Docker:
+   # Install backend dependencies
+   cd backend
+   npm install
+   cd ..
+   ```
+
+3. Set up environment variables:
+   Then edit `.env` file with .env.example
+
+4. Run the entire application stack with Docker:
    ```bash
    docker compose up
    ```
@@ -96,10 +107,6 @@ The application is containerized using Docker and includes:
 - Angular frontend
 - NestJS backend
 - PostgreSQL database
-
-### Environment Variables
-
-All necessary environment variables are configured in the `docker-compose.yml` file.
 
 ## Notes
 
