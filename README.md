@@ -99,7 +99,7 @@ API Endpoints:
   - `GET /orders/all` - Get all orders (Admin only)
   - `GET /orders/:id` - Get single order
   - `PATCH /orders/:id/status` - Update order status (Admin only)
-  - `DELETE /orders/:id` - Delete order (Admin only)
+  - `DELETE /orders/:id` - Delete order (Admin only) Demo purpose only: Order deletion would not be available in production
 
 ## Development
 
@@ -110,7 +110,14 @@ The application is containerized using Docker and includes:
 
 ## Notes
 
-- For demonstration purposes, the registration form allows selecting user roles (Admin/Client). In a production environment, this would typically be handled differently.
+  **Order Deletion**: 
+   - Demo: Orders can be deleted directly
+   - Production: Orders should be archived to maintain data integrity with products and order history
+
+  **User Role Selection**: 
+   - Demo: Users can choose their role (Admin/Client) during registration
+   - Production: Role assignment would be managed by administrators
+
 - The database is pre-seeded with sample products for testing purposes.
 - Admin users have full CRUD access to products and orders, while regular users can only view products and manage their own orders.
 

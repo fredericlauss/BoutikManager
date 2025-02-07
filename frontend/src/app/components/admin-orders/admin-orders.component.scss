@@ -186,6 +186,58 @@
   }
 }
 
+.delete-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+  border-top: 1px solid #e5e7eb;
+
+  .delete-button {
+    width: auto;
+    min-width: 100px;
+  }
+}
+
+.demo-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  padding: 0.25rem 0.5rem;
+  background-color: #f3f4f6;
+  border-radius: 0.25rem;
+
+  .demo-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+
+  button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    min-width: 100px;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
 @media (max-width: 640px) {
   .orders-container {
     padding: 1rem;
@@ -226,6 +278,31 @@
           }
         }
       }
+    }
+  }
+
+  .delete-section {
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    
+    .delete-button {
+      width: 100%;
+    }
+
+    .demo-notice {
+      max-width: none;
+      justify-content: center;
+      padding: 1rem;
+    }
+  }
+
+  .admin-actions {
+    flex-direction: column;
+    width: 100%;
+
+    button {
+      width: 100%;
     }
   }
 } 

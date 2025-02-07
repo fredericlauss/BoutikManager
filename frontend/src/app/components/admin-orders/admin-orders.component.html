@@ -47,12 +47,18 @@
               (click)="updateStatus(order.id, OrderStatus.CANCELLED)">
               Cancelled
             </button>
-            <button 
-              class="delete-button" 
-              (click)="deleteOrder(order.id)">
-              Delete
-            </button>
+            <div class="delete-section">
+              <button 
+                class="delete-button" 
+                (click)="deleteOrder(order.id)">
+                Delete
+              </button>
+            </div>
           </div>
+        </div>
+        <div class="demo-notice">
+          <span class="demo-icon">ℹ️</span>
+          <span>Demo purpose only: In production, orders should be archived instead of deleted to maintain data integrity with products and order history</span>
         </div>
       </div>
     }
