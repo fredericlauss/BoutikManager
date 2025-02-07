@@ -77,7 +77,15 @@ export class OrdersService {
     }
   }
 
-  async findAll(user: User): Promise<Order[]> {
+  // Nouvelle méthode pour admin - toutes les commandes
+  async findAll(): Promise<Order[]> {
+    return this.orderRepository.find({
+      relations: ['items', 'items.product', 'user']
+    });
+  }
+
+  // Méthode existante renommée pour plus de clarté
+  async findAllByUser(user: User): Promise<Order[]> {
     return this.orderRepository.find({
       where: { user: { id: user.id } },
       relations: ['items', 'items.product']
@@ -97,11 +105,14 @@ export class OrdersService {
     return order;
   }
 
-  async updateStatus(id: number, status: OrderStatus, user: User): Promise<Order> {
-    const order = await this.findOne(id, user);
-    
-    if (status === OrderStatus.CANCELLED && order.status !== OrderStatus.PENDING) {
-      throw new BadRequestException('Can only cancel pending orders');
+  async updateStatus(id: number, status: OrderStatus): Promise<Order> {
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['items', 'items.product']
+    });
+
+    if (!order) {
+      throw new NotFoundException(`Order #${id} not found`);
     }
 
     order.status = status;

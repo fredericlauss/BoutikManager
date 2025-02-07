@@ -1,0 +1,47 @@
+<div class="orders-container">
+  <div class="orders-box">
+    <div class="orders-header">
+      <h1>Manage Orders</h1>
+    </div>
+
+    @for (order of orders; track order.id) {
+      <div class="order-card">
+        <div class="order-header">
+          <span class="order-number">Order #{{ order.id }}</span>
+          <span class="order-date">{{ order.createdAt | date:'medium' }}</span>
+        </div>
+
+        <div class="order-items">
+          @for (item of order.items; track item.id) {
+            <div class="order-item">
+              <img [src]="item.product.imageUrl" [alt]="item.product.name">
+              <div class="item-details">
+                <span class="item-name">{{ item.product.name }}</span>
+                <span class="item-quantity">Quantity: {{ item.quantity }}</span>
+                <span class="item-price">{{ item.product.price | currency }}</span>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="order-footer">
+          <div class="status" [ngClass]="order.status.toLowerCase()">
+            {{ order.status }}
+          </div>
+          <div class="admin-actions">
+            @if (order.status === OrderStatus.PENDING) {
+              <button class="ship-button" (click)="updateStatus(order.id, OrderStatus.SHIPPED)">
+                Mark as Shipped
+              </button>
+            }
+            @if (order.status !== OrderStatus.CANCELLED) {
+              <button class="cancel-button" (click)="updateStatus(order.id, OrderStatus.CANCELLED)">
+                Cancel Order
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div> 

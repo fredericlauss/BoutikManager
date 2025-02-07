@@ -7,6 +7,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CartComponent } from './components/cart/cart.component';
 import { OrderListComponent } from './components/order-list/order-list.component';
+import { AdminOrdersComponent } from './components/admin-orders/admin-orders.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -40,6 +41,11 @@ export const routes: Routes = [
     path: 'orders',
     component: OrderListComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'admin/orders',
+    component: AdminOrdersComponent,
+    canActivate: [AuthGuard, RoleGuard]
   },
   { path: '', redirectTo: '/products', pathMatch: 'full' },
 ];

@@ -7,7 +7,7 @@ import { Order, OrderStatus } from '../interfaces/order.interface';
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = `http://localhost:3000/orders`;
+  private apiUrl = 'http://localhost:3000/orders';
 
   constructor(private http: HttpClient) {}
 
@@ -23,7 +23,12 @@ export class OrderService {
     return this.http.get<Order>(`${this.apiUrl}/${id}`);
   }
 
-  updateOrderStatus(id: number, status: OrderStatus): Observable<Order> {
-    return this.http.put<Order>(`${this.apiUrl}/${id}/status`, { status });
+  // Méthodes admin
+  getAllOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.apiUrl}/all`);
+  }
+
+  updateOrderStatus(orderId: number, status: OrderStatus): Observable<Order> {
+    return this.http.patch<Order>(`${this.apiUrl}/${orderId}/status`, { status });
   }
 } 
